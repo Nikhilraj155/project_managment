@@ -1,0 +1,51 @@
+app/
+  config/
+    database.py           # Mongo setup, env, secret keys
+  core/
+    dependencies.py       # Auth, role checks (student/mentor/panel)
+    security.py           # JWT, password hash, role permissions
+    permissions.py        # Custom role-based checks
+  models/
+    user.py               # User, login/register, profile, role field
+    team.py               # Team schema, mentor link, members
+    project.py            # Project, linked to team/mentor
+    task.py               # Task Kanban/CRUD
+    feedback.py           # Feedback for presentations, grading
+    presentation.py       # Presentation round tracking
+    file.py               # Details of uploaded files
+    notification.py       # Notification/event schema
+    chat.py               # Team chat messages
+  schemas/
+    user.py
+    team.py
+    project.py
+    task.py
+    feedback.py
+    presentation.py
+    chat.py
+    notification.py
+    file.py
+  routes/
+    auth.py               # Register, login, profile
+    users.py              # CRUD, detail (admin/mentor only)
+    teams.py              # Team management, invite
+    projects.py           # Project with team, mentor
+    tasks.py              # Kanban board, assign, update, delete
+    feedback.py           # Submit/view feedback
+    presentations.py      # Upload/view rounds/materials/evaluations
+    chat.py               # Team chat endpoints
+    notifications.py      # Real-time/user notifications
+    files.py              # Upload/download endpoint
+  services/
+    user_service.py
+    team_service.py
+    project_service.py
+    task_service.py
+    feedback_service.py
+    presentation_service.py
+    chat_service.py
+    notification_service.py
+    file_service.py
+  main.py                 # FastAPI app, CORS, router includes
+.env
+requirements.txt
