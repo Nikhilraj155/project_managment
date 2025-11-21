@@ -7,3 +7,5 @@ passlib[bcrypt]
 python-dotenv
 email-validator
 python-multipart
+pandas
+openpyxl

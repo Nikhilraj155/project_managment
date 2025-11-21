@@ -20,7 +20,6 @@ tasks_collection = db.tasks
 feedback_collection = db.feedback
 presentations_collection = db.presentations
 files_collection = db.files
-chats_collection = db.chats
 notifications_collection = db.notifications
 
 try:

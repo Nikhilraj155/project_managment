@@ -279,7 +279,7 @@ export default function AllocationsPage() {
                 {groups.length === 0 && !loading && (
                   <tr>
                     <td className="py-3 px-4 text-gray-500" colSpan={6}>
-                      No CSV data found. Upload an allocation CSV on the Admin dashboard.
+                      No allocation data found. Upload an allocation file (CSV or Excel) on the Admin dashboard.
                     </td>
                   </tr>
                 )}

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder as _original_jsonable_encoder
 
-from app.routes import auth, users, teams, projects, tasks, feedback, presentations, chat, notifications, files, student_feedback, project_ideas, round_schedules, dashboard, announcements, reports, csv_uploads
+from app.routes import auth, users, teams, projects, tasks, feedback, presentations, notifications, files, student_feedback, project_ideas, round_schedules, dashboard, announcements, reports, csv_uploads
 from app.config.database import check_db_connection, users_collection
 from app.services.auth_service import hash_password
 from app.core.json_encoder import jsonable_encoder
@@ -52,7 +52,6 @@ app.include_router(presentations.router)
 app.include_router(student_feedback.router)
 app.include_router(project_ideas.router)
 app.include_router(project_ideas.public_router)
-app.include_router(chat.router)
 app.include_router(notifications.router)
 app.include_router(files.router)
 app.include_router(round_schedules.router)

@@ -20,47 +20,49 @@ import PublicProjectIdea from './pages/PublicProjectIdea'
 import AllocationsPage from './pages/AllocationsPage'
 import MentorCommunication from './pages/MentorCommunication'
 import StudentCommunication from './pages/StudentCommunication'
+import AuthWrapper from './components/AuthWrapper'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      {/* Student Routes */}
-      <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
-      <Route path="/student/projects" element={<ProtectedRoute><StudentProjectsRedirect /></ProtectedRoute>} />
-      <Route path="/student/project/:projectId" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
-      <Route path="/student/team" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
-      <Route path="/student/chat" element={<ProtectedRoute><StudentCommunication /></ProtectedRoute>} />
-      <Route path="/student/presentations" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
-      <Route path="/student/calendar" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
-      
-      {/* Mentor Routes */}
-      <Route path="/mentor" element={<ProtectedRoute><MentorDashboard /></ProtectedRoute>} />
-      <Route path="/mentor/team/:teamId" element={<ProtectedRoute><MentorTeamOverview /></ProtectedRoute>} />
-      <Route path="/mentor/communication" element={<ProtectedRoute><MentorCommunication /></ProtectedRoute>} />
-      
-      {/* Panel Routes */}
-      <Route path="/panel" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
-      <Route path="/panel/presentations" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
-      <Route path="/panel/history" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
-      <Route path="/panel/evaluate/:presentationId" element={<ProtectedRoute><EvaluationForm /></ProtectedRoute>} />
+    <AuthWrapper>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-      {/* Admin Routes */}
-      <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/students" element={<ProtectedRoute><ManageStudents /></ProtectedRoute>} />
-      <Route path="/admin/mentors" element={<ProtectedRoute><ManageFaculty /></ProtectedRoute>} />
-      <Route path="/admin/allocations" element={<ProtectedRoute><AllocationsPage /></ProtectedRoute>} />
-      {/* Removed Manage Teams route */}
-      <Route path="/admin/presentations" element={<ProtectedRoute><PresentationsPage /></ProtectedRoute>} />
-      <Route path="/admin/announcements" element={<ProtectedRoute><AnnouncementsPage /></ProtectedRoute>} />
-      <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
+        {/* Student Routes */}
+        <Route path="/student" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
+        <Route path="/student/projects" element={<ProtectedRoute><StudentProjectsRedirect /></ProtectedRoute>} />
+        <Route path="/student/project/:projectId" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
+        <Route path="/student/team" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
+        <Route path="/student/presentations" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
+        <Route path="/student/calendar" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
 
-      {/* Public routes */}
-      <Route path="/ideas/submit/:token" element={<PublicProjectIdea />} />
-    </Routes>
+        {/* Mentor Routes */}
+        <Route path="/mentor" element={<ProtectedRoute><MentorDashboard /></ProtectedRoute>} />
+        <Route path="/mentor/team/:teamId" element={<ProtectedRoute><MentorTeamOverview /></ProtectedRoute>} />
+        <Route path="/mentor/communication" element={<ProtectedRoute><MentorCommunication /></ProtectedRoute>} />
+
+        {/* Panel Routes */}
+        <Route path="/panel" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
+        <Route path="/panel/presentations" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
+        <Route path="/panel/history" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />
+        <Route path="/panel/evaluate/:presentationId" element={<ProtectedRoute><EvaluationForm /></ProtectedRoute>} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/students" element={<ProtectedRoute><ManageStudents /></ProtectedRoute>} />
+        <Route path="/admin/mentors" element={<ProtectedRoute><ManageFaculty /></ProtectedRoute>} />
+        <Route path="/admin/allocations" element={<ProtectedRoute><AllocationsPage /></ProtectedRoute>} />
+        {/* Removed Manage Teams route */}
+        <Route path="/admin/presentations" element={<ProtectedRoute><PresentationsPage /></ProtectedRoute>} />
+        <Route path="/admin/announcements" element={<ProtectedRoute><AnnouncementsPage /></ProtectedRoute>} />
+        <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
+
+        {/* Public routes */}
+        <Route path="/ideas/submit/:token" element={<PublicProjectIdea />} />
+      </Routes>
+    </AuthWrapper>
   )
 }
 

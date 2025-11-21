@@ -65,7 +65,6 @@ export default function MentorTeamOverview() {
               { id: 'tasks', label: 'Task Progress' },
               { id: 'files', label: 'Files' },
               { id: 'feedback', label: 'Feedback' },
-              { id: 'chat', label: 'Chat' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -100,6 +99,12 @@ export default function MentorTeamOverview() {
             </div>
           )}
           {activeTab === 'tasks' && <ProgressTracker projectId="" tasks={tasks} />}
+          {activeTab === 'files' && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-xl font-semibold mb-4">Files</h3>
+              <p className="text-gray-600">File management features coming soon...</p>
+            </div>
+          )}
           {activeTab === 'feedback' && (
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-xl font-semibold mb-4">Feedback</h3>

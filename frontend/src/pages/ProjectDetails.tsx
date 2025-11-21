@@ -7,11 +7,9 @@ import { api } from '../lib/api'
 import { getSidebarItemsForRole } from '../config/sidebarConfig'
 import { HiFolder, HiDocumentText } from 'react-icons/hi'
 import { HiPresentationChartBar, HiChartBar } from 'react-icons/hi2'
-import { HiChat } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import KanbanBoard from '../components/KanbanBoard'
 import FileManager from '../components/FileManager'
-import TeamChat from '../components/TeamChat'
 import ProgressTracker from '../components/ProgressTracker'
 
 export default function ProjectDetails() {
@@ -149,7 +147,6 @@ export default function ProjectDetails() {
   const tabs = [
     { id: 'kanban', label: 'Kanban Board', icon: <HiFolder size={18} /> },
     { id: 'files', label: 'Files', icon: <HiDocumentText size={18} /> },
-    { id: 'chat', label: 'Team Chat', icon: <HiChat size={18} /> },
     { id: 'progress', label: 'Progress', icon: <HiChartBar size={18} /> },
     { id: 'presentations', label: 'Presentations', icon: <HiPresentationChartBar size={18} /> },
     { id: 'feedback', label: 'Feedback', icon: <HiPresentationChartBar size={18} /> },
@@ -196,7 +193,6 @@ export default function ProjectDetails() {
             <KanbanBoard projectId={projectId!} tasks={tasks} onTasksChange={setTasks} />
           )}
           {activeTab === 'files' && <FileManager projectId={projectId!} />}
-          {activeTab === 'chat' && <TeamChat projectId={projectId!} teamId={project.team_id} />}
           {activeTab === 'progress' && <ProgressTracker projectId={projectId!} tasks={tasks} />}
           {activeTab === 'presentations' && (
             <div className="bg-white rounded-lg shadow p-6">

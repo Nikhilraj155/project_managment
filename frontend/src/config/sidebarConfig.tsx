@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { HiHome, HiFolder, HiUsers, HiChat, HiPresentationChartBar, HiAcademicCap, HiFolderOpen, HiSpeakerphone, HiChartBar, HiClipboardCheck } from 'react-icons/hi'
+import { HiHome, HiFolder, HiUsers, HiPresentationChartBar, HiAcademicCap, HiFolderOpen, HiSpeakerphone, HiChartBar, HiClipboardCheck } from 'react-icons/hi'
 
 export interface SidebarItem {
   path: string
@@ -28,7 +28,7 @@ export const adminSidebarItems: SidebarItem[] = [
 // Mentor sidebar configuration
 export const mentorSidebarItems: SidebarItem[] = [
   { path: '/mentor', label: 'Dashboard', icon: <HiHome size={20} /> },
-  { path: '/mentor/communication', label: 'Communication', icon: <HiChat size={20} /> },
+  { path: '/mentor/team', label: 'Teams', icon: <HiUsers size={20} /> },
 ]
 
 // Panel sidebar configuration
