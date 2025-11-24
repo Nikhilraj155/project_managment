@@ -23,9 +23,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # Vite default frontend
-        "http://127.0.0.1:5173"   # Alternative localhost
+        "http://127.0.0.1:5173",  # Alternative localhost
+        "https://project-managment-mj1a.onrender.com"  # Deployed frontend
     ],
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.[0-9]+\.[0-9]+)(:[0-9]+)?$",
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.[0-9]+\.[0-9]+|project-managment-mj1a\.onrender\.com)(:[0-9]+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,3 +97,7 @@ async def ensure_default_admin():
     except Exception as e:
         # Startup should not crash if this fails; just log
         print("ensure_default_admin error:", e)
+ 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

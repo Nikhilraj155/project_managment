@@ -35,19 +35,22 @@ async def send_team_invitation_email(team_id: str, team_name: str, invitee_email
     try:
         api_key = get_brevo_api_key()
 
+        # Use deployed frontend URL or fallback to localhost
+        frontend_url = os.getenv('FRONTEND_URL', 'https://project-managment-mj1a.onrender.com')
+
         # Check if user with this email already exists
         existing_user = await db.users.find_one({"email": invitee_email})
         if existing_user:
             # User already exists, provide login link
             login_message = f"""
             <p>A user with this email address already has an account.</p>
-            <p><strong>Login:</strong> <a href="{os.getenv('FRONTEND_URL', 'http://localhost:3000')}/login">Login to your account</a></p>
+            <p><strong>Login:</strong> <a href="{frontend_url}/login">Login to your account</a></p>
             """
         else:
             # User doesn't exist, provide registration link
             login_message = f"""
             <p>No account found with this email address.</p>
-            <p><strong>Register:</strong> <a href="{os.getenv('FRONTEND_URL', 'http://localhost:3000')}/register">Create a new account</a></p>
+            <p><strong>Register:</strong> <a href="{frontend_url}/register">Create a new account</a></p>
             """
 
         # Email content
