@@ -5,7 +5,7 @@ const isProduction = import.meta.env.PROD
 
 // Use deployed backend URL in production, proxy in development
 const API_BASE_URL = isProduction
-  ? 'https://project-managment-mj1a.onrender.com/api'
+  ? 'https://project-managment-mj1a.onrender.com'
   : '/api'
 
 export const api = axios.create({
