@@ -2,6 +2,7 @@ import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { api } from '../lib/api'
+import backgroundImage from '../assets/img.jpg'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -48,10 +49,10 @@ export default function Register() {
   }
 
   return (
-    <div 
+    <div
       className="min-h-screen flex items-center justify-center relative"
       style={{
-        backgroundImage: 'url(/img.jpg)',
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

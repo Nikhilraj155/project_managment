@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { api } from '../lib/api'
 import { setCredentials } from '../store/authSlice'
+import backgroundImage from '../assets/img.jpg'
 
 function decodeJwt(token: string): any {
   try {
@@ -71,10 +72,10 @@ export default function Login() {
   }
 
   return (
-    <div 
+    <div
       className="min-h-screen flex items-center justify-center relative"
       style={{
-        backgroundImage: 'url(/img.jpg)',
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
