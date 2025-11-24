@@ -18,8 +18,6 @@ import TeamManagement from './pages/TeamManagement'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicProjectIdea from './pages/PublicProjectIdea'
 import AllocationsPage from './pages/AllocationsPage'
-import MentorCommunication from './pages/MentorCommunication'
-import StudentCommunication from './pages/StudentCommunication'
 import AuthWrapper from './components/AuthWrapper'
 
 function App() {
@@ -41,7 +39,6 @@ function App() {
         {/* Mentor Routes */}
         <Route path="/mentor" element={<ProtectedRoute><MentorDashboard /></ProtectedRoute>} />
         <Route path="/mentor/team/:teamId" element={<ProtectedRoute><MentorTeamOverview /></ProtectedRoute>} />
-        <Route path="/mentor/communication" element={<ProtectedRoute><MentorCommunication /></ProtectedRoute>} />
 
         {/* Panel Routes */}
         <Route path="/panel" element={<ProtectedRoute><PanelDashboard /></ProtectedRoute>} />

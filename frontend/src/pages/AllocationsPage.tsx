@@ -32,7 +32,7 @@ type AllocationGroup = {
 
 export default function AllocationsPage() {
   const { user } = useSelector((state: RootState) => state.auth)
-  const [rows, setRows] = useState<AllocationRow[]>([])
+  const [, setRows] = useState<AllocationRow[]>([])
   const [groups, setGroups] = useState<AllocationGroup[]>([])
   const [loading, setLoading] = useState(false)
   const [savingGroup, setSavingGroup] = useState<string | null>(null)

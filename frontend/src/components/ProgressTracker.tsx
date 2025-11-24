@@ -57,7 +57,7 @@ export default function ProgressTracker({ tasks }: ProgressTrackerProps) {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {statusData.map((entry, index) => (
+                {statusData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

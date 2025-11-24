@@ -45,7 +45,7 @@ export default function FileManager({ projectId }: FileManagerProps) {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('project_id', projectId);
-      const response = await api.post('/files/upload', formData, {
+      await api.post('/files/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       await fetchFiles(); // Refresh the file list

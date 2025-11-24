@@ -41,7 +41,13 @@ export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.auth)
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [csvSummary, setCsvSummary] = useState<{ total_students_from_csv: number; total_guides_from_csv: number; total_teams_from_csv: number } | null>(null)
+  const [csvSummary, setCsvSummary] = useState<{
+    total_students_from_csv: number;
+    total_guides_from_csv: number;
+    total_teams_from_csv: number;
+    file_type_breakdown?: { CSV?: number; Excel?: number };
+    excel_sheets_processed?: number;
+  } | null>(null)
   const [csvUploading, setCsvUploading] = useState(false)
   const [batches, setBatches] = useState<any[]>([])
   const [deletingBatch, setDeletingBatch] = useState<string | null>(null)
@@ -272,7 +278,7 @@ export default function AdminDashboard() {
                     <span className="text-green-600">
                       Excel: {csvSummary.file_type_breakdown.Excel || 0} records
                     </span>
-                    {csvSummary.excel_sheets_processed > 0 && (
+                    {csvSummary.excel_sheets_processed && csvSummary.excel_sheets_processed > 0 && (
                       <span className="text-purple-600">
                         Sheets: {csvSummary.excel_sheets_processed}
                       </span>

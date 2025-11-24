@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { HiHome, HiFolder, HiUsers, HiPresentationChartBar, HiAcademicCap, HiFolderOpen, HiSpeakerphone, HiChartBar, HiClipboardCheck } from 'react-icons/hi'
 
 export interface SidebarItem {
