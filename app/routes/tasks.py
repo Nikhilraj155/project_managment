@@ -109,15 +109,69 @@ async def get_task(task_id: str, user=Depends(require_user)):
 @router.put("/{task_id}", response_model=TaskOut)
 async def update_task(task_id: str, task: TaskCreate, user=Depends(require_user)):
     existing = await task_service.get_task_by_id(task_id)
-    if not existing or existing.get("created_by") != str(user["_id"]):
+    if not existing:
         raise HTTPException(status_code=404, detail="Task not found")
+
+    user_id = str(user["_id"])
+    user_role = user.get("role", "")
+
+    # Check if user has permission to update this task
+    can_update = False
+
+    # Admins can update any task
+    if user_role == "admin":
+        can_update = True
+    # User created the task
+    elif existing.get("created_by") == user_id:
+        can_update = True
+    # User is assigned to the task
+    elif existing.get("assigned_to") == user_id:
+        can_update = True
+    # User is in the task's team
+    elif existing.get("team_id"):
+        team_objectid = safe_objectid(existing.get("team_id"))
+        if team_objectid:
+            team = await db.teams.find_one({"_id": team_objectid})
+            if team and user_id in team.get("members", []):
+                can_update = True
+
+    if not can_update:
+        raise HTTPException(status_code=403, detail="Access denied")
+
     updated = await task_service.update_task(task_id, task.dict())
     return to_task_out(updated)
 
 @router.delete("/{task_id}")
 async def delete_task(task_id: str, user=Depends(require_user)):
     existing = await task_service.get_task_by_id(task_id)
-    if not existing or existing.get("created_by") != str(user["_id"]):
+    if not existing:
         raise HTTPException(status_code=404, detail="Task not found")
+
+    user_id = str(user["_id"])
+    user_role = user.get("role", "")
+
+    # Check if user has permission to delete this task
+    can_delete = False
+
+    # Admins can delete any task
+    if user_role == "admin":
+        can_delete = True
+    # User created the task
+    elif existing.get("created_by") == user_id:
+        can_delete = True
+    # User is assigned to the task
+    elif existing.get("assigned_to") == user_id:
+        can_delete = True
+    # User is in the task's team
+    elif existing.get("team_id"):
+        team_objectid = safe_objectid(existing.get("team_id"))
+        if team_objectid:
+            team = await db.teams.find_one({"_id": team_objectid})
+            if team and user_id in team.get("members", []):
+                can_delete = True
+
+    if not can_delete:
+        raise HTTPException(status_code=403, detail="Access denied")
+
     await task_service.delete_task(task_id)
     return {"deleted": True}

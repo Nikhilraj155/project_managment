@@ -62,13 +62,53 @@ export default function TeamManagement() {
       return
     }
 
+    if (!team || !team.id) {
+      toast.error('Team information not available. Please refresh the page.')
+      console.error('Team or team.id is missing:', team)
+      return
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(inviteEmail)) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+
     try {
-      // This would send an invitation
-      toast.success('Invitation sent')
-      setShowInviteModal(false)
-      setInviteEmail('')
-    } catch (error) {
-      toast.error('Failed to send invitation')
+      const token = localStorage.getItem('token')
+      console.log('Sending invitation to team:', team.id, 'email:', inviteEmail)
+
+      const response = await api.post(
+        `/teams/${team.id}/invite-member`,
+        { email: inviteEmail },
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+      )
+
+      console.log('Invitation response:', response.data)
+
+      if (response.data.success) {
+        toast.success(response.data.message)
+
+        // Show additional info if user already exists
+        if (response.data.user_exists) {
+          toast.info('User already has an account. They can login to accept the invitation.')
+        }
+
+        setShowInviteModal(false)
+        setInviteEmail('')
+      }
+    } catch (error: any) {
+      console.error('Invitation error:', error)
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail)
+      } else if (error.response?.status === 404) {
+        toast.error('Team not found. Please refresh the page.')
+      } else if (error.response?.status === 403) {
+        toast.error('You do not have permission to invite members to this team.')
+      } else {
+        toast.error('Failed to send invitation. Please try again.')
+      }
     }
   }
 

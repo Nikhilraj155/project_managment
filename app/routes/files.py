@@ -28,13 +28,17 @@ async def update_file(
     user=Depends(require_user)
 ):
     """Update/replace an existing file"""
-    updated_file = await file_service.update_file(file_id, file, user["_id"])
+    user_id = str(user["_id"])
+    user_role = user.get("role", "student")
+    updated_file = await file_service.update_file(file_id, file, user_id, user_role)
     return updated_file
 
 @router.delete("/{file_id}")
 async def delete_file(file_id: str, user=Depends(require_user)):
     """Delete a file"""
-    result = await file_service.delete_file(file_id, user["_id"])
+    user_id = str(user["_id"])
+    user_role = user.get("role", "student")
+    result = await file_service.delete_file(file_id, user_id, user_role)
     return result
 
 

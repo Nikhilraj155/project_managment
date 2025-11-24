@@ -73,7 +73,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   }, [dispatch, navigate, user])
 
   // Only render children once authentication is properly initialized
-  if (!token && !localStorage.getItem('token')) {
+  // But always allow access to public routes like login and register
+  const currentPath = window.location.pathname
+  const isPublicRoute = currentPath === '/login' || currentPath === '/register'
+
+  if (!token && !localStorage.getItem('token') && !isPublicRoute) {
     return null // Or a loading spinner
   }
 

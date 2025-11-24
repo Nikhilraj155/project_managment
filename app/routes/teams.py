@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from bson import ObjectId
 from app.models.team import TeamCreate, TeamOut
 from app.core.security import require_user
-from app.services import team_service
+from app.services import team_service, email_service
 from app.config.database import db  # only for filtered list; you can move this into service if preferred
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
@@ -98,3 +98,71 @@ async def assign_mentor(team_id: str, mentor_id: str, user=Depends(require_user)
         raise HTTPException(status_code=404, detail="Team not found")
     updated = await team_service.update_team(team_id, {"mentor_id": mentor_id})
     return {"updated": True, "team": to_team_out(updated)}
+
+@router.post("/{team_id}/invite-member")
+async def invite_member(team_id: str, invite_data: dict, user=Depends(require_user)):
+    """
+    Invite a member to join the team via email.
+
+    Request body should contain:
+    - email: The email address of the person to invite
+
+    Returns:
+    - success: Boolean indicating if invitation was sent successfully
+    - message: Success or error message
+    """
+    email = invite_data.get("email")
+
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+
+    # Validate email format (basic validation)
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Invalid email format")
+
+    # Validate team_id is a valid ObjectId
+    try:
+        ObjectId(team_id)
+    except:
+        raise HTTPException(status_code=400, detail="Invalid team ID format")
+
+    # Check if user exists with this email
+    existing_user = await email_service.check_user_exists(email)
+
+    # Get team details
+    team = await team_service.get_team_by_id(team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    # Check if user has permission to invite (must be team creator)
+    if team.get("created_by") != str(user["_id"]):
+        raise HTTPException(status_code=403, detail="Only team creator can invite members")
+
+    # Check team size limit (max 4 members)
+    current_members = team.get("members", [])
+    if len(current_members) >= 4:
+        raise HTTPException(status_code=400, detail="Team is already at maximum capacity (4 members)")
+
+    # Prevent inviting existing team members
+    if existing_user and str(existing_user["_id"]) in current_members:
+        raise HTTPException(status_code=400, detail="User is already a member of this team")
+
+    # Get inviter's name
+    inviter_name = user.get("username", user.get("email", "A team member"))
+
+    # Send invitation email
+    success = await email_service.send_team_invitation_email(
+        team_id=team_id,
+        team_name=team.get("name", "Unnamed Team"),
+        invitee_email=email,
+        inviter_name=inviter_name
+    )
+
+    if success:
+        return {
+            "success": True,
+            "message": f"Invitation sent successfully to {email}",
+            "user_exists": existing_user is not None
+        }
+    else:
+        raise HTTPException(status_code=500, detail="Failed to send invitation email")
