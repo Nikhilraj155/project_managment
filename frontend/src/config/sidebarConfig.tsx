@@ -28,7 +28,6 @@ export const adminSidebarItems: SidebarItem[] = [
 // Mentor sidebar configuration
 export const mentorSidebarItems: SidebarItem[] = [
   { path: '/mentor', label: 'Dashboard', icon: <HiHome size={20} /> },
-  { path: '/mentor/team', label: 'Teams', icon: <HiUsers size={20} /> },
 ]
 
 // Panel sidebar configuration
