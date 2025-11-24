@@ -24,7 +24,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # Vite default frontend
         "http://127.0.0.1:5173",  # Alternative localhost
-        "https://project-managment-uf65-jfybyjfyo-nikhilraj155s-projects.vercel.app/"  # Deployed frontend
+        "https://project-managment-sage.vercel.app"  # Deployed frontend
     ],
     allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.[0-9]+\.[0-9]+|project-managment-mj1a\.onrender\.com)(:[0-9]+)?$",
     allow_credentials=True,
