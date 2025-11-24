@@ -74,7 +74,7 @@ async def ensure_default_admin():
 
         email = os.getenv("ADMIN_EMAIL", "admin@example.com")
         username = os.getenv("ADMIN_USERNAME", "admin")
-        password = os.getenv("ADMIN_PASSWORD", "Admin@1234")
+        password = os.getenv("ADMIN_PASSWORD", "123456789")
 
         # Avoid duplicate by email
         by_email = await users_collection.find_one({"email": email})
