@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../store/store'
 import { api } from '../lib/api'
 import { HiX, HiBell } from 'react-icons/hi'
 import { formatDistanceToNow } from 'date-fns'
@@ -31,7 +29,6 @@ interface NotificationPanelProps {
 }
 
 export default function NotificationPanel({ isOpen, onClose, onMarkAllRead }: NotificationPanelProps) {
-  const { user } = useSelector((state: RootState) => state.auth)
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
