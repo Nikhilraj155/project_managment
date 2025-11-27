@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.core.security import require_user
 from app.config.database import db
+from app.services import notification_service
 from datetime import datetime
 from bson import ObjectId
 
@@ -19,7 +20,16 @@ def serialize(doc: dict) -> dict:
 @router.get("/")
 async def list_announcements(user=Depends(require_user)):
     results = []
-    cursor = db.announcements.find({}).sort("created_at", -1)
+    user_role = user.get("role", "student")
+
+    # Filter announcements based on user role
+    audience_filter = {
+        "audience": {
+            "$in": ["all", user_role]
+        }
+    }
+
+    cursor = db.announcements.find(audience_filter).sort("created_at", -1)
     async for a in cursor:
         results.append(serialize(a))
     return results
@@ -35,7 +45,19 @@ async def create_announcement(title: str, message: str, audience: str = "all", u
     }
     result = await db.announcements.insert_one(doc)
     saved = await db.announcements.find_one({"_id": result.inserted_id})
-    return serialize(saved)
+
+    # Create role-based notifications for the announcement
+    notification_count = await notification_service.create_role_based_notifications(
+        audience=audience,
+        message=message,
+        title=title,
+        notif_type="announcement"
+    )
+
+    return {
+        "announcement": serialize(saved),
+        "notification_count": notification_count
+    }
 
 @router.delete("/{announcement_id}")
 async def delete_announcement(announcement_id: str, user=Depends(require_user)):

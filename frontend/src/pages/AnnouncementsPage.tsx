@@ -30,12 +30,16 @@ export default function AnnouncementsPage() {
 
   const create = async () => {
     try {
-      await api.post('/announcements/', null, { params: { title, message, audience } })
+      const response = await api.post('/announcements/', null, { params: { title, message, audience } })
       setTitle(''); setMessage('')
       await load()
-      toast.success('Announcement posted')
-    } catch {
-      toast.error('Failed to post')
+
+      // Show success message with notification count
+      const notificationCount = response.data.notification_count || 0
+      toast.success(`Announcement posted! ${notificationCount} users notified.`)
+    } catch (error) {
+      console.error('Failed to post announcement:', error)
+      toast.error('Failed to post announcement')
     }
   }
 
@@ -64,6 +68,12 @@ export default function AnnouncementsPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">All Announcements</h2>
+            <span className="text-sm text-gray-500">
+              You are viewing announcements for: {user?.role === 'student' ? 'Students' : user?.role === 'mentor' ? 'Mentors' : user?.role}
+            </span>
+          </div>
           <ul className="divide-y">
             {items.map(a => (
               <li key={a.id} className="py-4 flex items-start justify-between">

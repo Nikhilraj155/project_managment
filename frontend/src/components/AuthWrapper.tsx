@@ -72,12 +72,13 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     initializeAuth()
   }, [dispatch, navigate, user])
 
-  // Only render children once authentication is properly initialized
-  // But always allow access to public routes like login and register
+  // Always allow React Router to handle navigation normally
+  // Only apply auth protection for non-public routes
   const currentPath = window.location.pathname
   const isPublicRoute = currentPath === '/login' || currentPath === '/register'
 
-  if (!token && !localStorage.getItem('token') && !isPublicRoute) {
+  // For protected routes, check authentication
+  if (!isPublicRoute && !token && !localStorage.getItem('token')) {
     return null // Or a loading spinner
   }
 

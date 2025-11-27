@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
 import { logout } from '../store/authSlice'
 import { HiBell, HiSearch, HiUser, HiLogout, HiMenu, HiX, HiAcademicCap } from 'react-icons/hi'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { api } from '../lib/api'
+import NotificationPanel from './NotificationPanel'
 
 interface LayoutProps {
   children: ReactNode
@@ -13,10 +15,38 @@ interface LayoutProps {
 
 export default function Layout({ children, sidebarItems }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [notificationPanelOpen, setNotificationPanelOpen] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
   const { user } = useSelector((state: RootState) => state.auth)
+
+  // Fetch unread count when component mounts and when notification panel opens/closes
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await api.get('/notifications/unread-count')
+      setUnreadCount(response.data.unread_count)
+    } catch (error) {
+      console.error('Failed to fetch unread count:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchUnreadCount()
+  }, [])
+
+  const handleNotificationPanelToggle = () => {
+    setNotificationPanelOpen(!notificationPanelOpen)
+    if (!notificationPanelOpen) {
+      // When opening the panel, fetch fresh data
+      fetchUnreadCount()
+    }
+  }
+
+  const handleMarkAllRead = () => {
+    setUnreadCount(0)
+  }
 
   const handleLogout = () => {
     dispatch(logout())
@@ -93,9 +123,14 @@ export default function Layout({ children, sidebarItems }: LayoutProps) {
 
               {/* Right Side Icons */}
               <div className="flex items-center gap-4">
-                <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <button
+                  onClick={handleNotificationPanelToggle}
+                  className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
                   <HiBell size={22} className="text-gray-600" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  )}
                 </button>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 rounded-lg p-2">
@@ -122,6 +157,13 @@ export default function Layout({ children, sidebarItems }: LayoutProps) {
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">{children}</main>
       </div>
+
+      {/* Notification Panel */}
+      <NotificationPanel
+        isOpen={notificationPanelOpen}
+        onClose={() => setNotificationPanelOpen(false)}
+        onMarkAllRead={handleMarkAllRead}
+      />
     </div>
   )
 }
